@@ -14,15 +14,20 @@ const User = require('../../models/User');
 
 // By adding auth to the get request below, it will protect the Get request
 router.get('/me', auth, async (req, res) => {
-   try {
-        const profile = await Profile.findOne({ user: req.user.id }).populate('user', ['name', 'avatar'])
-        if(!profile) {
-            return res.status(400).json({msg: 'There is no profile for this user'});
-        }
-   } catch(err) {
-       console.error(err.message);
-       res.status(500).send('Server Error');
-   }
+    try {
+      const profile = await Profile.findOne({
+        user: req.user.id
+      }).populate('user', ['name', 'avatar']);
+  
+      if (!profile) {
+        return res.status(400).json({ msg: 'There is no profile for this user' });
+      }
+  
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
 });
 
 // @route   POST api/profile
